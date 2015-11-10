@@ -1,7 +1,9 @@
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Priority queue implemented using a min-heap
  */
 
 /**
@@ -10,4 +12,15 @@
  */
 public class HuffmanTreePQ {
     
+    PriorityQueue queue;
+    
+    public HuffmanTreePQ() {
+        this(255);
+    }
+    
+    public HuffmanTreePQ(int startSize) {
+        if (startSize < 1)
+            throw new IllegalArgumentException();
+        queue = new PriorityQueue(255);
+    }
 }

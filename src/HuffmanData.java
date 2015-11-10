@@ -9,5 +9,29 @@
  * @author Aaron
  */
 public class HuffmanData {
-    
+
+    private char symbol;
+    private int frequency;
+
+    public HuffmanData() {
+    }
+
+    public HuffmanData(char symbol, int frequency) {
+        this.symbol = symbol;
+        this.frequency = frequency;
+    }
+
+    /**
+     * @return the symbol
+     */
+    public char getSymbol() {
+        return symbol;
+    }
+
+    /**
+     * @return the frequency
+     */
+    public int getFrequency() {
+        return frequency;
+    }
 }
