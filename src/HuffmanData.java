@@ -11,14 +11,18 @@
 public class HuffmanData {
 
     private char symbol;
-    private int frequency;
+    private int weight;
 
     public HuffmanData() {
     }
 
     public HuffmanData(char symbol, int frequency) {
         this.symbol = symbol;
-        this.frequency = frequency;
+        this.weight = frequency;
+    }
+
+    public HuffmanData(int frequency) {
+        weight = frequency;
     }
 
     /**
@@ -32,6 +36,6 @@ public class HuffmanData {
      * @return the frequency
      */
     public int getFrequency() {
-        return frequency;
+        return weight;
     }
 }
