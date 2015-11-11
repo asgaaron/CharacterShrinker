@@ -1,0 +1,22 @@
+Steps to test your Huffman Tree implementation.
+
+1. Make a directory for this assignment.
+
+2. Implement all your java programs in this directory.
+
+3. Compile all your java files: 
+   javac *.java
+
+4. Copy all files from the directory below to your assignment directory
+   
+   cp /home/faculty/jhyeh/cs321/labs/lab4/files/test/* ./.
+  
+5. To run the test program, execute the following on the command line
+
+   ./run_test_Huffman.sh <fileBuildHuffman> <fileToEncode>
+   
+   for example:
+   ./run_test_Huffman.sh fileBuildHuffman.txt fileToEncodeSmall.txt
+
+6. After running the previous command, if nothing prints out on the screen, 
+   then the test did not detect any error in your HuffmanTest output.

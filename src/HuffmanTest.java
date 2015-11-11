@@ -19,7 +19,26 @@ public class HuffmanTest {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        FileReader fileReader = new FileReader();
+        if (args.length != 4) {
+            printUsage();
+            return;
+        }
+        
+        boolean encode = true;
+        switch (args[1]){
+            case "-encode": {
+                encode = true;
+                break;
+            } case "-decode": {
+                encode = false;
+                break;
+            } default: {
+                printUsage();
+                return;
+            }
+        }
+            
+        FileReader fileReader = new FileReader(args[2]);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         int array[] = makeArray();
@@ -29,7 +48,22 @@ public class HuffmanTest {
         HuffmanTreePQ queue = new HuffmanTreePQ();
         formPQ(array, queue);
 
-        formTree(queue);
+        HuffmanNode huffmanTree;
+        huffmanTree = formTree(queue);
+        
+        
+    }
+
+    private static HuffmanNode formTree(HuffmanTreePQ queue) {
+        while (queue.queue.size() > 1) {
+            HuffmanNode hN1 = queue.queue.remove();
+            HuffmanNode hN2 = queue.queue.remove();
+            HuffmanData weightObject = new HuffmanData((hN1.getObject().getFrequency() + hN2.getObject().getFrequency()));
+            HuffmanNode hNCombined = new HuffmanNode(null, hN1, hN2, weightObject);
+            queue.queue.add(hNCombined);
+        }
+        HuffmanNode huffmanTree = queue.queue.remove();
+        return huffmanTree;
     }
 
     private static int[] makeArray() {
@@ -61,14 +95,11 @@ public class HuffmanTest {
         }
     }
 
-    private static void formTree(HuffmanTreePQ queue) {
-        while (queue.queue.size() > 1) {
-            HuffmanNode hN1 = queue.queue.remove();
-            HuffmanNode hN2 = queue.queue.remove();
-            HuffmanData weightObject = new HuffmanData((hN1.getObject().getFrequency() + hN2.getObject().getFrequency()));
-            HuffmanNode hNCombined = new HuffmanNode(null, hN1, hN2, weightObject);
-            queue.queue.add(hNCombined);
-        }
+    private static void printUsage() {
+        System.out.println("Usage:");
+        System.out.println("-encode <fileBuildHuffman> <fileToEncode> <fileEncoded>");
+        System.out.println("or");
+        System.out.println("-decode <fileBuildHuffman> <fileEncoded> <fileDecoded>");
     }
 
 }
