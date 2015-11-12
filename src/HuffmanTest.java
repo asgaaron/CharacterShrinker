@@ -23,35 +23,53 @@ public class HuffmanTest {
             printUsage();
             return;
         }
-        
+
         boolean encode = true;
-        switch (args[1]){
+        switch (args[0]) {
             case "-encode": {
                 encode = true;
                 break;
-            } case "-decode": {
+            }
+            case "-decode": {
                 encode = false;
                 break;
-            } default: {
+            }
+            default: {
                 printUsage();
                 return;
             }
         }
-            
-        FileReader fileReader = new FileReader(args[2]);
+
+        FileReader fileReader = new FileReader(args[1]);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
         int array[] = makeArray();
 
         parseInput(bufferedReader, array);
+        verifyHuffData(array);
 
         HuffmanTreePQ queue = new HuffmanTreePQ();
         formPQ(array, queue);
 
         HuffmanNode huffmanTree;
         huffmanTree = formTree(queue);
-        
-        
+        encode(queue);
+    }
+
+    private static void verifyHuffData(int[] array) {
+        for (int i = 0; i < 256; i++) {
+            if (array[i] > 0) {
+                if (i == 9) {
+                    System.out.println("\\t\t" + array[i]);
+                } else if (i == 10) {
+                    System.out.println("\\n\t" + array[i]);
+                } else if (i == 32) {
+                    System.out.println("space\t" + array[i]);
+                } else {
+                    System.out.println((char) i + "\t" + array[i]);
+                }
+            }
+        }
     }
 
     private static HuffmanNode formTree(HuffmanTreePQ queue) {
@@ -67,7 +85,7 @@ public class HuffmanTest {
     }
 
     private static int[] makeArray() {
-        int array[] = null;
+        int array[] = new int[256];
         for (int i = 0; i < 256; i++) {
             array[i] = 0;
         }
@@ -100,6 +118,10 @@ public class HuffmanTest {
         System.out.println("-encode <fileBuildHuffman> <fileToEncode> <fileEncoded>");
         System.out.println("or");
         System.out.println("-decode <fileBuildHuffman> <fileEncoded> <fileDecoded>");
+    }
+
+    private static void encode(HuffmanTreePQ queue) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

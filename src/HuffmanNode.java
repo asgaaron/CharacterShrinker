@@ -4,15 +4,15 @@
  * and open the template in the editor.
  */
 
-
 /**
  *
  * @author Aaron
  */
 public class HuffmanNode {
+
     private HuffmanNode parent, lChild, rChild;
     private HuffmanData object;
-    
+
     HuffmanNode() {
         parent = null;
         lChild = null;
@@ -82,5 +82,11 @@ public class HuffmanNode {
     public void setObject(HuffmanData object) {
         this.object = object;
     }
-    
+
+    /**
+     * Function to check whether the node is a leaf
+     */
+    public boolean checkLeaf() {
+        return !(lChild == null);
+    }
 }
