@@ -53,7 +53,12 @@ public class HuffmanTest {
 
         HuffmanNode huffmanTree;
         huffmanTree = formTree(queue);
-        encode(queue);
+        
+        //build code table
+        String[] table = new String[256];
+        buildTable(table, huffmanTree, "");
+        
+        encode(table);
     }
 
     private static void verifyHuffData(int[] array) {
@@ -78,6 +83,8 @@ public class HuffmanTest {
             HuffmanNode hN2 = queue.queue.remove();
             HuffmanData weightObject = new HuffmanData((hN1.getObject().getFrequency() + hN2.getObject().getFrequency()));
             HuffmanNode hNCombined = new HuffmanNode(null, hN1, hN2, weightObject);
+            hN1.setParent(hNCombined);
+            hN2.setParent(hNCombined);
             queue.queue.add(hNCombined);
         }
         HuffmanNode huffmanTree = queue.queue.remove();
@@ -96,9 +103,15 @@ public class HuffmanTest {
         //create huffman data objects, store each in a node
         //enqueue nodes in a PQ, a min heap
         for (int i = 0; i < 256; i++) {
-            HuffmanData tmp = new HuffmanData((char) i, array[i]);
-            HuffmanNode tmp1 = new HuffmanNode(null, null, null, tmp);
-            queue.queue.add(tmp1);
+            if (array[i] > 0) {
+                HuffmanData tmp = new HuffmanData((char) i, array[i]);
+                HuffmanNode tmp1 = new HuffmanNode(null, null, null, tmp);
+                queue.queue.add(tmp1);
+            }
+        }
+        if (queue.queue.size()==1) {
+            if (array['\0'] == 0) queue.queue.add(new HuffmanNode(null, null, null, new HuffmanData('\0', 0)));
+            else queue.queue.add(new HuffmanNode(null, null, null, new HuffmanData('\1', 0)));
         }
     }
 
@@ -122,6 +135,37 @@ public class HuffmanTest {
 
     private static void encode(HuffmanTreePQ queue) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    //making lookup table from encodings
+    private static void buildTable(String[] table, HuffmanNode node, String s) {
+        if (!node.checkLeaf()) {
+            buildTable(table, node.getlChild(), s + "0");
+            buildTable(table, node.getrChild(), s + "1");
+        } else {
+            table[node.getObject().getSymbol()] = s;
+        }
+    }
+
+    private static void printTree(HuffmanNode node) {
+        if (node.checkLeaf()) {
+            System.out.println("true");
+            System.out.println(node.getObject().getSymbol());
+        }
+        else {
+            printTree(node.getlChild());
+            printTree(node.getrChild());
+        }
+    }
+
+    private static String encode(String[] table, String fileToEncode) throws FileNotFoundException, IOException {
+        String fileEncoded = new String();
+        FileReader fr = new FileReader(fileToEncode);
+        BufferedReader br = new BufferedReader(fr);
+        while(br.ready()) {
+            
+        }
+        return fileEncoded;
     }
 
 }

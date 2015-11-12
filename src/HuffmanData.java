@@ -10,11 +10,8 @@
  */
 public class HuffmanData {
 
-    private char symbol;
-    private int weight;
-
-    public HuffmanData() {
-    }
+    private final char symbol;
+    private final int weight;
 
     public HuffmanData(char symbol, int frequency) {
         this.symbol = symbol;
@@ -23,6 +20,7 @@ public class HuffmanData {
 
     public HuffmanData(int frequency) {
         weight = frequency;
+        symbol = '\0';
     }
 
     /**

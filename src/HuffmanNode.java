@@ -1,3 +1,7 @@
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,7 +12,7 @@
  *
  * @author Aaron
  */
-public class HuffmanNode {
+public class HuffmanNode implements Comparable<HuffmanNode>{
 
     private HuffmanNode parent, lChild, rChild;
     private HuffmanData object;
@@ -25,6 +29,11 @@ public class HuffmanNode {
         this.lChild = lChild;
         this.rChild = rChild;
         this.object = object;
+    }
+    
+    private boolean isLeaf() {
+        assert ((lChild == null) && (rChild == null)) || ((lChild != null) && (rChild != null));
+        return (lChild == null) && (rChild == null);
     }
 
     /**
@@ -88,5 +97,18 @@ public class HuffmanNode {
      */
     public boolean checkLeaf() {
         return !(lChild == null);
+    }
+
+    @Override
+    public int compareTo(HuffmanNode node) {
+        if (this.object.getFrequency() < node.getObject().getFrequency()) return -1;
+        else if (this.object.getFrequency() == node.getObject().getFrequency()) return 0;
+        else if (this.object.getFrequency() > node.getObject().getFrequency()) return 1;
+        else try {
+            throw new Exception("Can't compare these nodes!");
+        } catch (Exception ex) {
+            Logger.getLogger(HuffmanNode.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 }
