@@ -1,7 +1,9 @@
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /*
@@ -53,14 +55,41 @@ public class HuffmanTest {
 
         HuffmanNode huffmanTree;
         huffmanTree = formTree(queue);
-        
+
         //build code table
         String[] table = new String[256];
         buildTable(table, huffmanTree, "");
         
-        encode(table);
+        verifyHuffCodes(table, array);
+
+        if (encode) {
+            String fileEncoded = encode(table, args[2]);
+            FileWriter fw = new FileWriter(args[3]);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(fileEncoded, 0, fileEncoded.length());
+            bw.close();
+            fw.close();
+        } else {
+            decode(table, args[2], args[3]);
+        }
     }
 
+    private static void verifyHuffCodes(String[] table, int[] array) {
+        for (int i = 0; i < 256; i++) {
+            if (array[i] > 0) {
+                if (i == 9) {
+                    System.out.println("\\t\t" + table[i]);
+                } else if (i == 10) {
+                    System.out.println("\\n\t" + table[i]);
+                } else if (i == 32) {
+                    System.out.println("space\t" + table[i]);
+                } else {
+                    System.out.println((char) i + "\t" + table[i]);
+                }
+            }
+        }
+    }
+    
     private static void verifyHuffData(int[] array) {
         for (int i = 0; i < 256; i++) {
             if (array[i] > 0) {
@@ -109,9 +138,12 @@ public class HuffmanTest {
                 queue.queue.add(tmp1);
             }
         }
-        if (queue.queue.size()==1) {
-            if (array['\0'] == 0) queue.queue.add(new HuffmanNode(null, null, null, new HuffmanData('\0', 0)));
-            else queue.queue.add(new HuffmanNode(null, null, null, new HuffmanData('\1', 0)));
+        if (queue.queue.size() == 1) {
+            if (array['\0'] == 0) {
+                queue.queue.add(new HuffmanNode(null, null, null, new HuffmanData('\0', 0)));
+            } else {
+                queue.queue.add(new HuffmanNode(null, null, null, new HuffmanData('\1', 0)));
+            }
         }
     }
 
@@ -133,13 +165,9 @@ public class HuffmanTest {
         System.out.println("-decode <fileBuildHuffman> <fileEncoded> <fileDecoded>");
     }
 
-    private static void encode(HuffmanTreePQ queue) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     //making lookup table from encodings
     private static void buildTable(String[] table, HuffmanNode node, String s) {
-        if (!node.checkLeaf()) {
+        if (!node.isLeaf()) {
             buildTable(table, node.getlChild(), s + "0");
             buildTable(table, node.getrChild(), s + "1");
         } else {
@@ -147,25 +175,37 @@ public class HuffmanTest {
         }
     }
 
-    private static void printTree(HuffmanNode node) {
-        if (node.checkLeaf()) {
-            System.out.println("true");
-            System.out.println(node.getObject().getSymbol());
-        }
-        else {
-            printTree(node.getlChild());
-            printTree(node.getrChild());
-        }
-    }
-
     private static String encode(String[] table, String fileToEncode) throws FileNotFoundException, IOException {
         String fileEncoded = new String();
         FileReader fr = new FileReader(fileToEncode);
         BufferedReader br = new BufferedReader(fr);
-        while(br.ready()) {
-            
+        while (br.ready()) {
+            fileEncoded += table[(int) br.read()];
         }
         return fileEncoded;
     }
 
+    private static void decode(String[] table, String fileEncoded, String fileDecoded) throws FileNotFoundException, IOException {
+        FileReader fr = new FileReader(fileEncoded);
+        BufferedReader br = new BufferedReader(fr);
+        FileWriter fw = new FileWriter(fileDecoded, false);
+        BufferedWriter bw = new BufferedWriter(fw);
+
+        String lookup = "";
+        while (br.ready()) {
+            lookup += (char)br.read();
+            for (int i = 0; i < 256; i++) {
+                if (table[i] != null) {
+                    if (table[i].equals(lookup)) {
+                        bw.write((char) i);
+                        lookup = "";
+                    }
+                }
+            }
+        }
+        br.close();
+        fr.close();
+        bw.close();
+        fw.close();
+    }
 }

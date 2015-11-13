@@ -31,7 +31,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>{
         this.object = object;
     }
     
-    private boolean isLeaf() {
+    public boolean isLeaf() {
         assert ((lChild == null) && (rChild == null)) || ((lChild != null) && (rChild != null));
         return (lChild == null) && (rChild == null);
     }
